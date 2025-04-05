@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="static/css/bootstrap.css" rel="stylesheet" />
+</head>
+
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">ITForum</a>
+
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">Find</button>
+            </form>
+
+            <div class="d-flex gap-2 align-items-center">
+                <div>
+                    <img src="hello.jpg" class="img-thumbnail" alt="...">
+                </div>
+                <div class="content">
+                    <div class="content__name text-white">Dr. Musk</div>
+                    <div class="content__links">
+                        <a href="#" class="text-white">Settings</a>
+                        <span class="text-white mx-2 small">|</span>
+                        <a href="#" class="text-white">Log out</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </nav>
+
+    <main class="container mt-2">
+        <div class="row">
+            <section class="col">
+                <article class="d-flex gap-3 flex-column">
+                    <div class="card text-gray" style="background-color: #F5F5DC">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-2">
+                                    <div style="height: 100px;" class="border mb-2 w-100">
+                                        <img src="#" alt="img" class="img-fluid">
+                                    </div>
+                                    <div>
+                                        <input type="number" class="form-control" style="background-color: #F5F5DC" value="5">
+                                    </div>
+                                </div>
+                                <div class="col d-flex flex-column justify-content-between">
+                                    <div>
+                                        <h5 class="card-title">Special title treatment</h5>
+                                        <p class="card-text">With supporting text below as a natural lead-in to
+                                            additional
+                                            content.
+                                        </p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <span>Tags:</span>
+                                            <span class="badge rounded-pill text-bg-primary">Python</span>
+                                            <span class="badge rounded-pill text-bg-secondary">C++</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-success" style="height: 4px; margin: 1rem 0;"></div>
+                    <div class="card">
+                        <div class="card text-gray card-body py-2" style="background-color: #F5F5DC">
+                            <div class="row">
+                                <div class="col-1">
+                                    <div style="height: 60px;" class="border mb-1 w-100">
+                                        <img src="#" alt="img" class="img-fluid">
+                                    </div>
+                                    <div>
+                                        <input type="number" class="form-control" style="background-color: #F5F5DC" value="-3">
+                                    </div>
+                                </div>
+                                <div class="col d-flex flex-column justify-content-between">
+                                    <div>
+                                        <h6 class="card-title mb-1">I have no idea!</h6>
+                                        <p class="card-text small">Thats a tough question...</p>
+                                    </div>
+                                    <div class="text-start">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="correctCheck">
+                                            <label class="form-check-label" for="correctCheck">Correct!</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card text-gray card-body py-2" style="background-color: #F5F5DC">
+                            <div class="row">
+                                <div class="col-1">
+                                    <div style="height: 60px;" class="border mb-1 w-100">
+                                        <img src="#" alt="img" class="img-fluid">
+                                    </div>
+                                    <div>
+                                        <input type="number" class="form-control" style="background-color: #F5F5DC" value="-3">
+                                    </div>
+                                </div>
+                                <div class="col d-flex flex-column justify-content-between">
+                                    <div>
+                                        <h6 class="card-title mb-1">I have no idea!</h6>
+                                        <p class="card-text small">Thats a tough question...</p>
+                                    </div>
+                                    <div class="text-start">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="correctCheck1">
+                                            <label class="form-check-label" for="correctCheck1">Correct!</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <textarea class="form-control mb-2" id="questionText" rows="5" style="background-color: #F5F5DC" placeholder="Enter your answer here"></textarea>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary">Answer</button>
+                                <button type="button" class="btn btn-outline-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item"><a class="page-link text-black" style="background-color: #F5F5DC" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link text-black" style="background-color: #F5F5DC" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link text-black" style="background-color: #F5F5DC" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link text-black" style="background-color: #F5F5DC" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link text-black" style="background-color: #F5F5DC" href="#">Next</a></li>
+                        </ul>
+                    </nav>
+                </article>
+            </section>
+
+            <aside class="col-3">
+
+                <section class="card shadow-sm mb-3">
+                    <div class="card-body">
+                        <h3 class="h5 fw-bold mb-3">Popular Tags</h3>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="#" class="badge bg-primary text-decoration-none">Python</a>
+                            <a href="#" class="badge bg-secondary text-decoration-none">C++</a>
+                            <a href="#" class="badge bg-success text-decoration-none">JavaScript</a>
+                            <a href="#" class="badge bg-danger text-decoration-none">HTML</a>
+                            <a href="#" class="badge bg-warning text-dark text-decoration-none">CSS</a>
+                            <a href="#" class="badge bg-info text-dark text-decoration-none">Assembly</a>
+                            <a href="#" class="badge bg-light text-dark text-decoration-none">C</a>
+                            <a href="#" class="badge bg-dark text-decoration-none">C#</a>
+                        </div>
+                    </div>
+                </section>
+
+
+                    <section class="card shadow-sm">
+                        <div class="card-body">
+                            <h3 class="h5 fw-bold mb-3">Best Members</h3>
+                            <div class="list-group list-group-flush">
+                                <a href="#" class="list-group-item list-group-item-action">User764</a>
+                                <a href="#" class="list-group-item list-group-item-action">User765</a>
+                                <a href="#" class="list-group-item list-group-item-action">User766</a>
+                                <a href="#" class="list-group-item list-group-item-action">User767</a>
+                                <a href="#" class="list-group-item list-group-item-action">User768</a>
+                                <a href="#" class="list-group-item list-group-item-action">User769</a>
+                                <a href="#" class="list-group-item list-group-item-action">User770</a>
+                            </div>
+                        </div>
+                    </section>
+
+            </aside>
+        </div>
+    </main>
+    <footer class="bg-success text-white py-3 mt-4">
+        <div class="container">
+            <div class="text-center">
+                <p class="mb-0">ITForum - get an answer to your question!</p>
+            </div>
+        </div>
+    </footer>
+    <script src="static/js/bootstrap.bundle.js"></script>
+</body>
+
+</html>
