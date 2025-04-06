@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .utils import paginate
 import random
 
 all_tags = ['Python', 'C++', 'JavaScript', 'HTML', 'CSS', 'Assembly', 'C', 'C#']
 def index(request):
     questions = []
-    for i in range(1, 21):
+    for i in range(1, 50):
         questions.append({
             'title': f'Question title {i}',
             'id': i,
@@ -14,6 +15,8 @@ def index(request):
             'rating': random.randint(-10, 10),
             'tags': ['Python', 'C++'] if i % 2 else ['JavaScript', 'HTML']
         })
+
+    page = paginate(questions, request, per_page=5)
     popular_tags = [
         {'name': 'Python'},
         {'name': 'Django'},
@@ -30,10 +33,11 @@ def index(request):
     ]
 
     return render(request, 'index.html', {
-        'questions': questions,
+        'questions': page.object_list,
         'page_title': 'New Questions',
         'popular_tags': popular_tags,
         'best_members': best_members,
+        'page': page
     })
 
 
