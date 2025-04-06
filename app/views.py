@@ -11,7 +11,7 @@ def index(request):
             'title': f'Question title {i}',
             'id': i,
             'text': f'This is text for question {i}. With supporting text below as a natural lead-in to additional content.',
-            'answers_count': i % 5,
+            'answers_count': random.randint(0, 5),
             'rating': random.randint(-10, 10),
             'tags': ['Python', 'C++'] if i % 2 else ['JavaScript', 'HTML']
         })
@@ -48,8 +48,8 @@ def hot(request):
             'title': f'Hot question {i}',
             'id': i,
             'text': f'This is popular question {i}. With supporting text below as a natural lead-in to additional content.',
-            'answers_count': i % 3,
-            'rating': 50 - i,
+            'answers_count': random.randint(0, 5),
+            'rating': random.randint(-10, 10),
             'tags': ['Python', 'CSS'] if i % 2 else ['JavaScript', 'C++']
         })
 
@@ -74,7 +74,7 @@ def hot(request):
 
 def tag(request, tag_name):
     questions = []
-    for i in range(1, 21):
+    for i in range(1, 30):
         questions.append({
             'title': f'Question about {tag_name} {i}',
             'id': i,
@@ -83,6 +83,8 @@ def tag(request, tag_name):
             'rating': 20 - i,
             'tags': [tag_name, 'CSS'] if i % 2 else [tag_name, 'C++']
         })
+
+    page = paginate(questions, request, per_page=5)
 
     popular_tags = [
         {'name': 'Python'},
@@ -99,8 +101,12 @@ def tag(request, tag_name):
         {'username': 'BMSTUstudent'},
     ]
 
-    return render(request, 'tagged.html', {'questions': questions, 'tag_name': tag_name, 'popular_tags': popular_tags,
-        'best_members': best_members})
+    return render(request, 'tagged.html', {
+        'page': page,
+        'tag_name': tag_name,
+        'popular_tags': popular_tags,
+        'best_members': best_members
+    })
 
 
 def question(request, question_id):
