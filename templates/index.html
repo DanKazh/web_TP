@@ -16,7 +16,7 @@
 
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <a href="{% url 'ask' %}" class="btn btn-outline-light">Ask</a>
+                <a href="{% url 'app:ask' %}" class="btn btn-outline-light">Ask</a>
             </form>
 
             <div class="d-flex gap-2 align-items-center">
@@ -26,9 +26,9 @@
                 <div class="content">
                     <div class="content__name text-white">Dr. Musk</div>
                     <div class="content__links">
-                        <a href="{% url 'usersettings' %}" class="text-white">Settings</a>
+                        <a href="{% url 'app:usersettings' %}" class="text-white">Settings</a>
                         <span class="text-white mx-2 small">|</span>
-                        <a href="{% url 'login' %}" class="text-white">Log out</a>
+                        <a href="{% url 'app:login' %}" class="text-white">Log out</a>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
             <section class="col">
                 <div class="d-flex align-items-center gap-2 mb-4">
                     <h1>New Questions</h1>
-                    <a href="{% url 'index' %}" class="text-black">Hot questions</a>
+                    <a href="{% url 'app:index' %}" class="text-black">Hot questions</a>
                 </div>
 
                 <article class="d-flex gap-3 flex-column">
@@ -63,7 +63,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                                <a class='text-black' href="{% url 'question' question_id=1 %}">Answers ({{ question.answers_count }})</a>
+                                                <a class='text-black' href="{% url 'app:question' question_id=1 %}">Answers ({{ question.answers_count }})</a>
                                         </div>
                                         <div class="col text-end">
                                             <span>Tags:</span>
@@ -78,13 +78,31 @@
                     </div>
                     {% endfor %}
 
-                    <nav aria-label="Page navigation example">
+                    <nav aria-label="Page navigation">
                         <ul class="pagination">
-                            <li class="page-item"><a class="page-link text-black" style="background-color: #F5F5DC" href="#">Previous</a></li>
-                            <li class="page-item"><a class="page-link text-black" style="background-color: #F5F5DC" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link text-black" style="background-color: #F5F5DC" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link text-black" style="background-color: #F5F5DC" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link text-black" style="background-color: #F5F5DC" href="#">Next</a></li>
+                            {% if page.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link text-black" style="background-color: #F5F5DC" href="?page={{ page.previous_page_number }}">Previous</a>
+                            </li>
+                            {% endif %}
+
+                            {% for num in page.paginator.page_range %}
+                                {% if page.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link" style="background-color: #28a745; border-color: #28a745">{{ num }}</span>
+                                </li>
+                                {% else %}
+                                <li class="page-item">
+                                    <a class="page-link text-black" style="background-color: #F5F5DC" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page.has_next %}
+                            <li class="page-item">
+                                <a class="page-link text-black" style="background-color: #F5F5DC" href="?page={{ page.next_page_number }}">Next</a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </nav>
                 </article>
@@ -96,7 +114,7 @@
                         <h3 class="h5 fw-bold mb-3">Popular Tags</h3>
                         <div class="d-flex flex-wrap gap-2">
                             {% for tag in popular_tags %}
-                            <a href="{% url 'tag' tag_name='Python' %}" class="badge bg-primary text-decoration-none">{{ tag.name }}</a>
+                            <a href="{% url 'app:tag' tag_name='Python' %}" class="badge bg-primary text-decoration-none">{{ tag.name }}</a>
                             {% endfor %}
                         </div>
                     </div>
