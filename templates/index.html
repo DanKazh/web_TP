@@ -12,7 +12,7 @@
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="#">ITForum</a>
+            <a class="navbar-brand" href="{% url 'app:index' %}">ITForum</a>
 
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -78,33 +78,7 @@
                     </div>
                     {% endfor %}
 
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination">
-                            {% if page.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link text-black" style="background-color: #F5F5DC" href="?page={{ page.previous_page_number }}">Previous</a>
-                            </li>
-                            {% endif %}
-
-                            {% for num in page.paginator.page_range %}
-                                {% if page.number == num %}
-                                <li class="page-item active">
-                                    <span class="page-link" style="background-color: #28a745; border-color: #28a745">{{ num }}</span>
-                                </li>
-                                {% else %}
-                                <li class="page-item">
-                                    <a class="page-link text-black" style="background-color: #F5F5DC" href="?page={{ num }}">{{ num }}</a>
-                                </li>
-                                {% endif %}
-                            {% endfor %}
-
-                            {% if page.has_next %}
-                            <li class="page-item">
-                                <a class="page-link text-black" style="background-color: #F5F5DC" href="?page={{ page.next_page_number }}">Next</a>
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
+                    {% include 'paginator.html' %}
                 </article>
             </section>
 
