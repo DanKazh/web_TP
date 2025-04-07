@@ -110,22 +110,23 @@ def tag(request, tag_name):
 
 
 def question(request, question_id):
-    """Страница вопроса с ответами"""
     question_data = {
         'title': f'Question title {question_id}',
         'id': question_id,
         'text': f'This is text for question {question_id}. With supporting text below as a natural lead-in to additional content.',
         'rating': 15,
-        'tags': ['Python', 'C++']
+        'tags': ['Python', 'C++'],
     }
 
     answers = []
-    for i in range(1, 5):
+    for i in range(1, 25):
         answers.append({
             'text': f'This is answer {i} to question {question_id}. Thats a tough question...',
             'rating': random.randint(0, 3),
             'is_correct': i == 1
         })
+
+    page = paginate(answers, request, per_page=5)
 
     popular_tags = [
         {'name': 'Python'},
@@ -144,9 +145,9 @@ def question(request, question_id):
 
     return render(request, 'question.html', {
         'question': question_data,
-        'answers': answers,
         'popular_tags': popular_tags,
-        'best_members': best_members
+        'best_members': best_members,
+        'page': page
     })
 
 
@@ -165,7 +166,6 @@ def login(request):
         {'username': 'TPTeacher'},
         {'username': 'BMSTUstudent'},
     ]
-    """Форма входа"""
     return render(request, 'login.html', {'popular_tags': popular_tags,
         'best_members': best_members})
 
