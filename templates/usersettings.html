@@ -1,0 +1,42 @@
+{% extends 'baseAuthorized.html' %}
+{% load static %}
+
+{% block title %}Bootstrap demo{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center gap-2 mb-4">
+    <h1>Settings: Dr. Pepper</h1>
+</div>
+
+<form class="card p-4" style="background-color: #F5F5DC">
+    <div class="row mb-3">
+        <label for="login" class="col-sm-2 col-form-label">Login</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="login" value="dr_pepper" style="background-color: #F5F5DC">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="email" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-10">
+            <input type="email" class="form-control" id="email" value="drpepper@mail.ru" style="background-color: #F5F5DC">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Upload avatar</label>
+        <div class="col-sm-9">
+            <div class="input-group">
+                <input type="file" class="form-control d-none" id="regAvatar">
+                <label class="btn btn-outline-secondary" for="regAvatar">Choose</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-10 offset-sm-2">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
