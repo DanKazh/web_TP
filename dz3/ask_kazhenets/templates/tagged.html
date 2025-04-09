@@ -1,0 +1,56 @@
+{% extends 'baseAuthorized.html' %}
+{% load static %}
+
+{% block title %}Questions tagged: {{ tag_name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center gap-2 mb-4">
+    <h1>Questions tagged: {{ tag_name }}</h1>
+</div>
+
+<article class="d-flex gap-3 flex-column">
+    {% for question in questions %}
+    <div class="card" style="background-color: #F5F5DC">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-2">
+                    <div style="height: 100px;" class="border mb-2 w-100">
+                        <img src="{% static 'img/default-avatar.jpg' %}" alt="img" class="img-fluid">
+                    </div>
+                    <div>
+                        <input type="number" class="form-control" value="{{ question.rating }}" style="background-color: #F5F5DC" readonly>
+                    </div>
+                </div>
+                <div class="col d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title">{{ question.title }}</h5>
+                        <p class="card-text">{{ question.text }}</p>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <a class='text-black text-decoration-none' href="{% url 'app:question' question_id=question.id %}">
+                                Answers ({{ question.get_answers_count }})
+                            </a>
+                        </div>
+                        <div class="col text-end">
+                            <span>Tags:</span>
+                            {% for tag in question.tags.all %}
+                            <a href="{% url 'app:tag' tag_name=tag.name %}" class="badge rounded-pill text-bg-primary text-decoration-none">
+                                {{ tag.name }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info">
+        No questions found with this tag.
+    </div>
+    {% endfor %}
+
+    {% include 'paginator.html' %}
+</article>
+{% endblock %}
