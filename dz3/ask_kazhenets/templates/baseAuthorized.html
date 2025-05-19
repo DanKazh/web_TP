@@ -30,17 +30,23 @@
             </form>
 
             <div class="d-flex gap-2 align-items-center">
+                {% if user.is_authenticated %}
                 <div>
-                    <img src="{% static 'img/hello.jpg' %}" class="img-thumbnail" alt="img">
+                    {% if user.profile.avatar %}
+                        <img src="{{ user.profile.avatar.url }}" class="img-thumbnail" alt="Avatar" width="50" height="50">
+                    {% else %}
+                        <img src="{% static 'img/default-avatar.jpg' %}" class="img-thumbnail" alt="Default Avatar" width="50" height="50">
+                    {% endif %}
                 </div>
                 <div class="content">
-                    <div class="content__name text-white">Dr. Musk</div>
+                    <div class="content__name text-white">{{ user.username }}</div>
                     <div class="content__links">
                         <a href="{% url 'app:usersettings' %}" class="text-white">Settings</a>
                         <span class="text-white mx-2 small">|</span>
-                        <a href="{% url 'app:login' %}" class="text-white">Log out</a>
+                        <a href="{% url 'app:login' %}" class="text-white">Logout</a>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </nav>
