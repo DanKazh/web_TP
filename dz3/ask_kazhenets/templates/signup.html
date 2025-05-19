@@ -1,59 +1,65 @@
 {% extends 'baseUnAuthorized.html' %}
 {% load static %}
 
-{% block title %}Bootstrap demo{% endblock %}
+{% block title %}Registration{% endblock %}
 
 {% block content %}
 <div class="card mb-4" style="background-color: #F5F5DC">
     <div class="card-body">
         <h1 class="h2 mb-4">Registration</h1>
 
+        {% if form.errors %}
         <div class="alert alert-danger mb-4" role="alert">
-            Sorry, this email address already registered!
+            {% for field, errors in form.errors.items %}
+                {{ errors|join:", " }}
+            {% endfor %}
         </div>
+        {% endif %}
 
-        <form>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
             <div class="mb-3 row">
-                <label for="regEmail" class="col-sm-3 col-form-label">Email</label>
+                <label for="id_email" class="col-sm-3 col-form-label">Email</label>
                 <div class="col-sm-9">
-                    <input type="email" class="form-control" id="regEmail" style="background-color: #F5F5DC">
+                    {{ form.email }}
                 </div>
             </div>
 
             <div class="mb-3 row">
-                <label for="regNickname" class="col-sm-3 col-form-label">Login</label>
+                <label for="id_username" class="col-sm-3 col-form-label">Login</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="regNickname" maxlength='25' style="background-color: #F5F5DC">
+                    {{ form.username }}
                     <div class="form-text">max 25 symbols</div>
                 </div>
             </div>
 
             <div class="mb-3 row">
-                <label for="regPassword" class="col-sm-3 col-form-label">Password</label>
+                <label for="id_password1" class="col-sm-3 col-form-label">Password</label>
                 <div class="col-sm-9">
-                    <input type="password" class="form-control" id="regPassword" maxlength='25' placeholder="**********" style="background-color: #F5F5DC">
+                    {{ form.password1 }}
                 </div>
             </div>
 
             <div class="mb-3 row">
-                <label for="regRepeatPassword" class="col-sm-3 col-form-label">Repeat password</label>
+                <label for="id_password2" class="col-sm-3 col-form-label">Repeat password</label>
                 <div class="col-sm-9">
-                    <input type="password" class="form-control" id="regRepeatPassword" maxlength="25" placeholder="**********" style="background-color: #F5F5DC">
+                    {{ form.password2 }}
                 </div>
             </div>
 
             <div class="mb-4 row">
-                <label for="regAvatar" class="col-sm-3 col-form-label">Upload avatar</label>
+                <label for="id_avatar" class="col-sm-3 col-form-label">Upload avatar</label>
                 <div class="col-sm-9">
                     <div class="input-group">
-                        <input type="file" class="form-control d-none" id="regAvatar">
-                        <label class="btn btn-outline-secondary" for="regAvatar">Choose</label>
+                        <input type="file" class="form-control" name="avatar" id="id_avatar" accept="image/*">
+                        <label class="btn btn-outline-secondary" for="id_avatar">Choose</label>
                     </div>
                 </div>
             </div>
 
             <div class="d-grid">
-                <a href="{% url 'app:index' %}" class="btn btn-success">Register</a>
+                <button type="submit" class="btn btn-success">Register</button>
             </div>
         </form>
     </div>
