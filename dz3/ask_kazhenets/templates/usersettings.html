@@ -1,42 +1,72 @@
 {% extends 'baseAuthorized.html' %}
 {% load static %}
 
-{% block title %}Bootstrap demo{% endblock %}
+{% block title %}User Settings{% endblock %}
 
 {% block content %}
-<div class="d-flex align-items-center gap-2 mb-4">
-    <h1>Settings: Dr. Pepper</h1>
-</div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4" style="background-color: #F5F5DC">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Profile Settings</h2>
 
-<form class="card p-4" style="background-color: #F5F5DC">
-    <div class="row mb-3">
-        <label for="login" class="col-sm-2 col-form-label">Login</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="login" value="dr_pepper" style="background-color: #F5F5DC">
-        </div>
-    </div>
+                    {% if messages %}
+                    <div class="alert alert-success">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
 
-    <div class="row mb-3">
-        <label for="email" class="col-sm-2 col-form-label">Email</label>
-        <div class="col-sm-10">
-            <input type="email" class="form-control" id="email" value="drpepper@mail.ru" style="background-color: #F5F5DC">
-        </div>
-    </div>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-    <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Upload avatar</label>
-        <div class="col-sm-9">
-            <div class="input-group">
-                <input type="file" class="form-control d-none" id="regAvatar">
-                <label class="btn btn-outline-secondary" for="regAvatar">Choose</label>
+                        <div class="mb-3 row">
+                            <label for="username" class="col-sm-3 col-form-label">Username</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="username"
+                                       name="username" value="{{ username }}"
+                                       style="background-color: #F5F5DC">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="email" class="col-sm-3 col-form-label">Email</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="email"
+                                       name="email" value="{{ email }}"
+                                       style="background-color: #F5F5DC">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Avatar</label>
+                            <div class="col-sm-9">
+                                <div class="input-group mb-2">
+                                    <input type="file" class="form-control d-none" id="avatar" name="avatar">
+                                    <label class="btn btn-outline-secondary" for="avatar" style="background-color: #F5F5DC">
+                                        Choose File
+                                    </label>
+                                </div>
+                                {% if avatar_url %}
+                                <div>
+                                    <img src="{{ avatar_url }}" class="img-thumbnail" width="100" alt="Current avatar">
+                                    <small class="text-muted ms-2">Current avatar</small>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-sm-9 offset-sm-3">
+                                <button type="submit" class="btn btn-success">Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-sm-10 offset-sm-2">
-            <a href="{% url 'app:index' %}" class="btn btn-success">Save</a>
-        </div>
-    </div>
-</form>
+</div>
 {% endblock %}
