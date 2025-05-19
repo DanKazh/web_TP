@@ -20,7 +20,7 @@
             <a class="navbar-brand" href="{% url 'app:login' %}">ITForum</a>
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <a href="{% url 'app:ask' %}" class="btn btn-outline-light">Ask</a>
+                <a href="{% url 'app:login' %}" class="btn btn-outline-light">Ask</a>
             </form>
             <div class="d-flex gap-2 align-items-center">
                 <a href="{% url 'app:login' %}" class="btn btn-outline-light">Log in</a>
@@ -43,7 +43,7 @@
                         <h3 class="h5 fw-bold mb-3">Popular Tags</h3>
                         <div class="d-flex flex-wrap gap-2">
                             {% for tag in popular_tags %}
-                            <a href="{% url 'app:tag' tag_name=tag.name %}" class="badge bg-primary text-decoration-none">{{ tag.name }}</a>
+                            <a href="{% url 'app:login' %}" class="badge bg-primary text-decoration-none">{{ tag.name }}</a>
                             {% endfor %}
                         </div>
                     </div>
