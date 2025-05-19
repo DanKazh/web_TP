@@ -1,4 +1,7 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 app_name = 'app'
@@ -9,8 +12,11 @@ urlpatterns = [
     path('newq/', views.newq, name='newq'),
     path('tag/<str:tag_name>/', views.tag, name='tag'),
     path('question/<int:question_id>/', views.question, name='question'),
-    path('login/', views.login, name='login'),
-    path('signup/', views.signup, name='signup'),
+    path('login/', views.login_view, name='login'),
+    path('signup/', views.signup_view, name='signup'),
+    path('logout/', views.user_logout, name='logout'),
+
     path('ask/', views.ask, name='ask'),
+    path('question/<int:question_id>/answer/', views.add_answer, name='add_answer'),
     path('usersettings/', views.user_settings, name='usersettings'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
