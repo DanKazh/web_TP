@@ -3,6 +3,7 @@
 
 {% block title %}Bootstrap demo{% endblock %}
 
+
 {% block content %}
 <div class="d-flex align-items-center gap-2 mb-4">
     <h1><a class='text-black' href="{% url 'app:index' %}">Find your question!</a></h1>
@@ -20,8 +21,22 @@
                         <img src="{% if question.author.profile.avatar %}{{ question.author.profile.avatar.url }}{% else %}{% static 'img/default-avatar.jpg' %}{% endif %}"
                              alt="User avatar" class="img-fluid h-100 w-100 object-fit-cover">
                     </div>
-                    <div>
-                        <input type="number" class="form-control" value="{{ question.rating }}" style="background-color: #F5F5DC">
+                    <div class="d-flex flex-column align-items-center">
+                        <button class="btn btn-sm btn-outline-success vote-btn"
+                                data-question-id="{{ question.id }}"
+                                data-value="1"
+                                {% if request.user == question.author %}disabled{% endif %}>
+                            <i class="bi bi-arrow-up"></i>
+                        </button>
+                        <span class="question-rating my-1" data-question-id="{{ question.id }}">
+                            {{ question.rating }}
+                        </span>
+                        <button class="btn btn-sm btn-outline-danger vote-btn"
+                                data-question-id="{{ question.id }}"
+                                data-value="-1"
+                                {% if request.user == question.author %}disabled{% endif %}>
+                            <i class="bi bi-arrow-down"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="col d-flex flex-column justify-content-between">
@@ -50,4 +65,53 @@
 
     {% include 'paginator.html' %}
 </article>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.vote-btn').click(function() {
+        const questionId = $(this).data('question-id');
+        const value = $(this).data('value');
+        const $ratingElement = $(`.question-rating[data-question-id="${questionId}"]`);
+
+        console.log('Sending vote for question', questionId, 'with value', value);
+
+        $.ajax({
+            url: "/vote_question/" + questionId + "/",
+            type: 'POST',
+            data: {
+                'value': value,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            success: function(data) {
+                console.log('Received response:', data);
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    $ratingElement.text(data.rating);
+
+
+                    const $upBtn = $(`.vote-btn[data-question-id="${questionId}"][data-value="1"]`);
+                    const $downBtn = $(`.vote-btn[data-question-id="${questionId}"][data-value="-1"]`);
+
+                    if (data.user_vote === 1) {
+                        $upBtn.addClass('btn-success').removeClass('btn-outline-success');
+                        $downBtn.addClass('btn-outline-danger').removeClass('btn-danger');
+                    } else if (data.user_vote === -1) {
+                        $downBtn.addClass('btn-danger').removeClass('btn-outline-danger');
+                        $upBtn.addClass('btn-outline-success').removeClass('btn-success');
+                    } else {
+                        $upBtn.addClass('btn-outline-success').removeClass('btn-success');
+                        $downBtn.addClass('btn-outline-danger').removeClass('btn-danger');
+                    }
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error, xhr.responseText);
+                alert('Error: ' + (xhr.responseJSON?.error || 'Something went wrong'));
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
