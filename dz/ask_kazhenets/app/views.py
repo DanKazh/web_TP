@@ -1,12 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.db import models
 from .forms import LoginForm, RegisterForm, ProfileEditForm
 from django.core.paginator import Paginator
 from .models import Question, Tag, Answer, User, Profile
 from django.contrib import messages
 from django import forms
 from django.urls import reverse
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from .models import QuestionLike, AnswerLike
+
 
 
 def paginate(request, queryset, per_page=5):
@@ -115,26 +120,16 @@ def user_settings(request):
     profile = user.profile
 
     if request.method == 'POST':
-        new_username = request.POST.get('username')
-        new_email = request.POST.get('email')
-        new_avatar = request.FILES.get('avatar')
-        if new_username and new_username != user.username:
-            user.username = new_username
-        if new_email and new_email != user.email:
-            user.email = new_email
-        user.save()
-        if new_avatar:
-            profile.avatar = new_avatar
-        profile.save()
-
-        messages.success(request, 'Your profile has been updated successfully!')
-        return redirect('app:usersettings')
-    initial_data = {
-        'username': user.username,
-        'email': user.email,
-    }
+        form = ProfileEditForm(request.POST, request.FILES, instance=profile, user=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated successfully!')
+            return redirect('app:usersettings')
+    else:
+        form = ProfileEditForm(instance=profile, user=user)
 
     return render(request, 'usersettings.html', {
+        'form': form,
         'username': user.username,
         'email': user.email,
         'avatar_url': profile.avatar.url if profile.avatar else None,
@@ -142,25 +137,16 @@ def user_settings(request):
         'best_members': User.best_members.get_best_members(),
     })
 
-
 @login_required
 def ask(request):
     if request.method == 'POST':
-        form = QuestionForm(request.POST)
+        form = QuestionForm(request.POST, user=request.user)
         if form.is_valid():
-            question = form.save(commit=False)
-            question.author = request.user
-            question.save()
-            tags_str = request.POST.get('tags', '')
-            tags_list = [tag.strip() for tag in tags_str.split(',') if tag.strip()]
-            for tag_name in tags_list:
-                tag, created = Tag.objects.get_or_create(name=tag_name)
-                question.tags.add(tag)
-
+            question = form.save()
             messages.success(request, 'Your question has been posted!')
             return redirect('app:question', question_id=question.id)
     else:
-        form = QuestionForm()
+        form = QuestionForm(user=request.user)
 
     return render(request, 'ask.html', {
         'form': form,
@@ -168,17 +154,13 @@ def ask(request):
         'best_members': User.best_members.get_best_members(),
     })
 
-
 @login_required
 def add_answer(request, question_id):
     question = get_object_or_404(Question, id=question_id)
     if request.method == 'POST':
-        form = AnswerForm(request.POST)
+        form = AnswerForm(request.POST, user=request.user, question=question)
         if form.is_valid():
-            answer = form.save(commit=False)
-            answer.question = question
-            answer.author = request.user
-            answer.save()
+            answer = form.save()
             return redirect(f"{reverse('app:question', kwargs={'question_id': question.id})}#answer-{answer.id}")
     return redirect('app:question', question_id=question_id)
 
@@ -202,3 +184,92 @@ class AnswerForm(forms.ModelForm):
             'text': forms.Textarea(attrs={'class': 'form-control', 'style': 'background-color: #F5F5DC', 'rows': 5}),
         }
 
+
+@login_required
+@require_POST
+def vote_question(request, question_id):
+    question = get_object_or_404(Question, id=question_id)
+    value = int(request.POST.get('value', 0))
+
+    if request.user == question.author:
+        return JsonResponse({'error': 'You cannot vote for your own question'}, status=400)
+
+    vote, created = QuestionLike.objects.get_or_create(
+        question=question,
+        user=request.user,
+        defaults={'value': value}
+    )
+
+    if not created:
+        if vote.value == value:
+            vote.delete()
+            value = 0
+        else:
+            vote.value = value
+            vote.save()
+
+
+    question.rating = question.questionlike_set.aggregate(models.Sum('value'))['value__sum'] or 0
+    question.save()
+
+    return JsonResponse({
+        'rating': question.rating,
+        'user_vote': value
+    })
+
+
+@login_required
+@require_POST
+def vote_answer(request, answer_id):
+    answer = get_object_or_404(Answer, id=answer_id)
+    value = int(request.POST.get('value', 0))
+
+    if request.user == answer.author:
+        return JsonResponse({'error': 'You cannot vote for your own answer'}, status=400)
+
+    vote, created = AnswerLike.objects.get_or_create(
+        answer=answer,
+        user=request.user,
+        defaults={'value': value}
+    )
+
+    if not created:
+        if vote.value == value:
+            vote.delete()
+            value = 0
+        else:
+            vote.value = value
+            vote.save()
+
+
+    answer.rating = answer.answerlike_set.aggregate(models.Sum('value'))['value__sum'] or 0
+    answer.save()
+
+    return JsonResponse({
+        'rating': answer.rating,
+        'user_vote': value
+    })
+
+
+@login_required
+@require_POST
+def mark_correct(request, answer_id):
+    answer = get_object_or_404(Answer, id=answer_id)
+
+    if request.user != answer.question.author:
+        return JsonResponse({'error': 'Only question author can mark answers'}, status=403)
+
+
+    is_checked = request.POST.get('is_checked', 'false') == 'true'
+
+    if is_checked:
+
+        Answer.objects.filter(question=answer.question).update(is_correct=False)
+
+        answer.is_correct = True
+    else:
+        answer.is_correct = False
+
+    answer.save()
+
+    return JsonResponse({'is_correct': answer.is_correct})
