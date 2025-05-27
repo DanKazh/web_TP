@@ -15,7 +15,9 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('signup/', views.signup_view, name='signup'),
     path('logout/', views.user_logout, name='logout'),
-
+    path('vote_question/<int:question_id>/', views.vote_question, name='vote_question'),
+    path('answer/<int:answer_id>/vote/', views.vote_answer, name='vote_answer'),
+    path('answer/<int:answer_id>/mark_correct/', views.mark_correct, name='mark_correct'),
     path('ask/', views.ask, name='ask'),
     path('question/<int:question_id>/answer/', views.add_answer, name='add_answer'),
     path('usersettings/', views.user_settings, name='usersettings'),
