@@ -11,6 +11,10 @@ from django.urls import reverse
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .models import QuestionLike, AnswerLike
+from django.http import HttpResponse
+
+def benchmark_view(request):
+    return HttpResponse("<html><body><h1>Dynamic Test</h1></body></html>")
 
 
 
