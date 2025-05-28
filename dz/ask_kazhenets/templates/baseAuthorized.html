@@ -24,9 +24,14 @@
         <div class="container">
             <a class="navbar-brand" href="{% url 'app:index' %}">ITForum</a>
 
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <a href="{% url 'app:ask' %}" class="btn btn-outline-light">Ask</a>
+            <form class="d-flex" role="search" action="{% url 'app:search' %}" method="get">
+                <input class="form-control me-2"
+                       type="search"
+                       name="q"
+                       placeholder="Search questions..."
+                       aria-label="Search"
+                       value="{{ request.GET.q }}">
+                <button class="btn btn-outline-light" type="submit">Search</button>
             </form>
 
             <div class="d-flex gap-2 align-items-center">
