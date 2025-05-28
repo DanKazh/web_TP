@@ -1,0 +1,31 @@
+{% extends 'baseAuthorized.html' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h1 class="h4 mb-4">Search Results for "{{ query }}"</h1>
+
+        {% if questions %}
+            <div class="list-group">
+                {% for question in questions %}
+                <a href="{% url 'app:question' question_id=question.id %}"
+                   class="list-group-item list-group-item-action">
+                    <h5 class="mb-1">{{ question.title }}</h5>
+                    <p class="mb-1 text-muted">{{ question.text|truncatewords:30 }}</p>
+                    <small class="text-muted">
+                        {{ question.created_at|date:"M d, Y" }} |
+                        Answers: {{ question.answers.count }}
+                    </small>
+                </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                No questions found matching your search.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
