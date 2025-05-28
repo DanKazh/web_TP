@@ -16,8 +16,6 @@ from django.http import HttpResponse
 def benchmark_view(request):
     return HttpResponse("<html><body><h1>Dynamic Test</h1></body></html>")
 
-
-
 def paginate(request, queryset, per_page=5):
     paginator = Paginator(queryset, per_page)
     page_number = request.GET.get('page')
@@ -277,3 +275,25 @@ def mark_correct(request, answer_id):
     answer.save()
 
     return JsonResponse({'is_correct': answer.is_correct})
+
+
+def search(request):
+    query = request.GET.get('q', '')
+
+    if query:
+        questions = Question.objects.filter(
+            models.Q(title__icontains=query) |
+            models.Q(text__icontains=query)
+        ).order_by('-created_at')
+    else:
+        questions = Question.objects.none()
+
+    page = paginate(request, questions)
+
+    return render(request, 'search_results.html', {
+        'page': page,
+        'questions': page.object_list,
+        'query': query,
+        'popular_tags': Tag.objects.get_popular_tags(),
+        'best_members': User.best_members.get_best_members(),
+    })
